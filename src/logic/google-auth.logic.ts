@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { GetTokenResponse } from 'google-auth-library/build/src/auth/oauth2client';
+import { GetTokenResponse, TokenInfo } from 'google-auth-library/build/src/auth/oauth2client';
 import * as google from 'googleapis';
 import getEnv from '../helpers/dotenv.helper';
 import GoogleSecrets from '../interfaces/google-secrets.interface';
@@ -34,15 +34,29 @@ export default class GoogleAuth {
         })
     }
 
+    async getTokenInfo(tokenResponse: GetTokenResponse): Promise<TokenInfo> {
+        let oauth = this.prepareOauth();
+        oauth.credentials = tokenResponse.tokens
+
+        if (!oauth.credentials.access_token) {
+            throw new Error("No access token found!")
+        }
+        return oauth.getTokenInfo(oauth.credentials.access_token)
+
+    }
+
 
     async getToken(code: string): Promise<GetTokenResponse> {
+
         let oauth = this.prepareOauth()
 
         try {
-            return (await oauth.getToken(code));
+            let token = await oauth.getToken(code)
+            console.log(token)
+            return token
         }
-        catch (e) {
-            throw new Error("getToken failed!")
+        catch (e: any) {
+            throw new Error(e.message)
         }
     }
 
