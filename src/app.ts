@@ -2,17 +2,18 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import { GoogleAuthController } from "./controllers/google-auth.controller";
-import { MainController } from "./controllers/main.controller";
 import { Controller } from "./interfaces/controller.interface";
 import { errorMiddleware } from "./middlewares/error-handler.middleware";
+import redisStoreFromEnv from "./helpers/store.helper";
+import Store from "./interfaces/store.interface";
 export default class App {
     public app: express.Express;
+
     private controllers: Controller[] = [
-        new MainController(),
-        new GoogleAuthController()
+        new GoogleAuthController(this.store)
     ]
 
-    constructor() {
+    constructor(private store: Store) {
         this.app = express();
 
         this.setupMiddlewares();

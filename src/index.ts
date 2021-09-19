@@ -2,6 +2,8 @@ import * as dotenv from "dotenv";
 import App from "./app"
 import http from "http";
 import getEnv from "./helpers/dotenv.helper";
+import InMemoryStore from "./logic/in-memory.store";
+import redisStoreFromEnv from "./helpers/store.helper";
 dotenv.config();
 
 
@@ -15,7 +17,7 @@ if (!env.PORT) {
 }
 
 
-let app = new App()
+let app = new App(redisStoreFromEnv())
 
 
 http.createServer(app.app).listen(parseInt(env.PORT), () => {
