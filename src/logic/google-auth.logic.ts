@@ -51,9 +51,7 @@ export default class GoogleAuth {
         let oauth = this.prepareOauth()
 
         try {
-            let token = await oauth.getToken(code)
-            console.log(token)
-            return token
+            return oauth.getToken(code)
         }
         catch (e: any) {
             throw new Error(e.message)

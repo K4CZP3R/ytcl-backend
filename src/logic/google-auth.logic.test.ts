@@ -76,7 +76,7 @@ describe('GoogleAuthLogic tests', () => {
         }
 
         expect(thrownError).not.toBeUndefined()
-        expect((thrownError as Error).message).toContain("getToken failed!")
+        expect((thrownError as Error).message).toContain("invalid_request")
     })
 
 })
