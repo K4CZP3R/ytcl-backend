@@ -49,7 +49,7 @@ export default class InMemoryStore implements Store {
         return new Promise((resolve, reject) => {
             let idx = this.getIdxIfExists(key);
             if (idx === -1) {
-                reject();
+                reject("User not found");
             }
 
             resolve(JSON.parse(this.memory[idx].value))
