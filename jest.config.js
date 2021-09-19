@@ -7,8 +7,5 @@ module.exports = {
     'ts-jest':{
       isolatedModules: true
     }
-  },
-  globalSetup: "<rootDir>/jest.global-setup.js",
-  globalTeardown: "<rootDir>/jest.global-teardown.js"
-
+  }
 };
