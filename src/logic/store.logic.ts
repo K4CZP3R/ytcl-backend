@@ -2,34 +2,35 @@ import { createClient } from "redis";
 import { RedisClientType } from "redis/dist/lib/client";
 import { RedisModules } from "redis/dist/lib/commands";
 import { RedisLuaScripts } from "redis/dist/lib/lua-script";
-import getEnv from "../helpers/dotenv.helper";
 
 
 export default class Store {
     client: RedisClientType<RedisModules, RedisLuaScripts>
 
-    constructor() {
-        if (!getEnv().REDIS_HOST) {
-            throw new Error("Redis host not specified!")
-        }
+    constructor(redisHost?: string) {
 
-        this.client = createClient({
+        this.client = redisHost ? createClient({
             socket: {
-                url: getEnv().REDIS_HOST
+                url: redisHost
             }
-        })
+        }) : createClient()
+        // this.client = createClient({
+        //     socket: {
+        //         url: redisHost
+        //     }
+        // })
 
-        this.client.on('error', (err) => {
-            console.error("redis error, reconnecting!");
+        // this.client.on('error', (err) => {
+        //     console.error("redis error, reconnecting!");
 
-            this.client.disconnect().then(() => {
-                setInterval(() => {
-                    this.client.connect()
-                })
-            })
-        })
+        //     this.client.disconnect().then(() => {
+        //         setInterval(() => {
+        //             this.client.connect()
+        //         })
+        //     })
+        // })
 
-        this.client.connect();
+        // this.client.connect();
     }
 
     removeKey(key: string): Promise<number> {
